@@ -258,6 +258,11 @@
                     on:ready={(v) => {
                         visualReady = v.detail == true;
                     }}
+                    on:popuperror={(v)=>{
+                        if(v.detail == true){
+                            clearAll();
+                        }
+                    }}
                 />
                 {#if visualReady}
                     <div

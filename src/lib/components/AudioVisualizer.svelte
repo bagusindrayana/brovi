@@ -132,6 +132,7 @@
         if (alreadyDrawWindows) return;
         // const bufferLength = analyser.frequencyBinCount
         await delay(500);
+        closeWindows();
         windows = [];
         const barWidth = 150;
         var ammout = Math.round(window.screen.width / barWidth) - 2;
@@ -154,6 +155,11 @@
 
                 console.log("WINDOW : ", i);
                 
+            } else {
+                await dispatch("ready", false);
+                await dispatch("popuperror", true);
+                alert("Please allow all popups and try again : close all previous popups manually after allow all popups");
+                break;
             }
         }
 
