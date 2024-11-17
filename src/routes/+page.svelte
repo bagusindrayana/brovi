@@ -286,10 +286,13 @@
                 <p class="text-yellow-500">Warning : only work on desktop</p>
             </div>
         {:else}
-            <div class="mt-8 text-center text-gray-400">
+            <div class="mt-4 text-center text-gray-400">
                 <p class="text-yellow-500">
                     Warning : dont hover to browser icon in toolbar or browser
                     preview will freeze
+                </p>
+                <p class="text-yellow-500">
+                    Warning : click close button below song/file name to close all popup window
                 </p>
             </div>
         {/if}

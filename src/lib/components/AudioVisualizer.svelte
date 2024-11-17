@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount, onDestroy,createEventDispatcher } from "svelte";
+    import { onMount, onDestroy, createEventDispatcher } from "svelte";
 
     export let audioElement: HTMLAudioElement;
     export let play: boolean;
@@ -13,7 +13,7 @@
     let canvas: HTMLCanvasElement;
     let animationFrame: number;
     let analyser: AnalyserNode | null = null;
-    let alreadyDrawWindows : boolean = false;
+    let alreadyDrawWindows: boolean = false;
     let windows: Window[] = [];
 
     const dispatch = createEventDispatcher();
@@ -22,16 +22,14 @@
         if (animationFrame) {
             cancelAnimationFrame(animationFrame);
         }
-        
     }
 
-    function closeWindows(){
+    function closeWindows() {
         pauseVisualizer();
         for (let i = 0; i < windows.length; i++) {
             const w = windows[i];
             w.close();
         }
-        
     }
 
     async function playVisualizer() {
@@ -61,12 +59,11 @@
         const bufferLength = analyser.frequencyBinCount;
 
         const dataArray = new Uint8Array(bufferLength);
-       
 
         const ctx = canvas.getContext("2d")!;
 
         function draw() {
-            if(canvas == null) return;
+            if (canvas == null) return;
             const WIDTH = canvas.width;
             const HEIGHT = canvas.height;
 
@@ -74,7 +71,6 @@
                 animationFrame = requestAnimationFrame(draw);
             }, 1000 / 30);
 
-            
             if (analyser != null) {
                 analyser.getByteFrequencyData(dataArray);
             }
@@ -93,17 +89,21 @@
             var offset = 3;
             for (let x = 0; x < windows.length; x++) {
                 const w = windows[x];
-                w.resizeTo(150, dataArray[x+offset] * 2);
-                w.moveTo((x*160),window.screen.height-((dataArray[x+offset] * 1)/2));
+                w.resizeTo(150, dataArray[x + offset] * 2);
+                w.moveTo(
+                    x * 175,
+                    window.screen.height - (dataArray[x + offset] * 1) / 2,
+                );
                 //send data to pop up windo
-                w.postMessage({
-                    type: 'music',
-                    data: dataArray,
-                    index:x,
-                },"*")
+                w.postMessage(
+                    {
+                        type: "music",
+                        data: dataArray,
+                        index: x,
+                    },
+                    "*",
+                );
                 offset += 3;
-
-                
             }
 
             for (let i = 0; i < bufferLength; i++) {
@@ -127,31 +127,36 @@
 
         draw();
     }
-    const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
-    async function drawWindows () {
-        if(alreadyDrawWindows) return;
+    const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+    async function drawWindows() {
+        if (alreadyDrawWindows) return;
         // const bufferLength = analyser.frequencyBinCount
         windows = [];
         const barWidth = 150;
-        var ammout = Math.round(window.screen.width/barWidth)-1;
+        var ammout = Math.round(window.screen.width / barWidth) - 1;
         alreadyDrawWindows = true;
-       
+
         var x = 0;
         for (let i = 0; i < ammout; i++) {
-            let myWindow = window.open('/bar', '', 'width='+barWidth+',height=200,toolbar=no,titlebar=no,menubar=no');
-            if(myWindow){
+            let myWindow = window.open(
+                "/bar",
+                "",
+                "width=" +
+                    barWidth +
+                    ",height=200,toolbar=no,titlebar=no,menubar=no",
+            );
+            await delay(200);
+            if (myWindow != null) {
                 myWindow.moveTo(x, window.screen.height);
                 windows.push(myWindow);
+                x += 175;
+
+                console.log("WINDOW : ", i);
+                
             }
-            x += barWidth + 10;
-            
-            console.log("WINDOW : ",i);
-            await delay(500);
         }
 
-        await dispatch('ready', true);
-        
-        
+        await dispatch("ready", true);
     }
 
     // onMount(() => {
