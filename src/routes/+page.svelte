@@ -312,7 +312,7 @@
             </div>
         {/if}
     </div>
-    <div class="absolute left-0 right-0 text-center bottom-4 text-gray-400 block mx-auto">
-       <a href="https://github.com/bagusindrayana/brovi">&copy; bagusindrayana</a>
+    <div class="fixed left-0 right-0 text-center bottom-2 text-gray-400 block mx-auto">
+       <a href="https://github.com/bagusindrayana/brovi" target="_blank">&copy; bagusindrayana</a>
     </div>
 </div>
