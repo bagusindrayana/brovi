@@ -210,7 +210,7 @@
             <label
                 class="flex flex-col items-center justify-center w-full h-32 px-4 transition bg-gray-800 border-2 border-gray-700 border-dashed rounded-lg hover:border-purple-500 hover:bg-gray-800/50 relative"
             >
-                {#if songInfo != null}
+                {#if songInfo != null && hasFile}
                     <div
                         class="flex flex-col items-center justify-center pt-5 pb-6"
                     >
