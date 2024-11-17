@@ -127,16 +127,20 @@
     }
 
     function clearAll() {
-        audioElement.pause();
+        if(audioElement){
+            audioElement.pause();
+        }
         hasFile = false;
-
         songInfo = null;
         visualReady = false;
         clear = true;
+        isPlaying = false;
 
         setTimeout(() => {
             currentFile = null;
-            audioElement.remove();
+            if(audioElement){
+                audioElement.remove();
+            }
         }, 100);
     }
 </script>
