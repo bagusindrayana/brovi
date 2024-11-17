@@ -278,8 +278,8 @@
                     No visualization yet. Select an audio file to get started!
                 </p>
                 <p class="text-yellow-500">
-                    Warning : to show viasualizer using window browser accept &
-                    allow popup
+                    Warning : to show viasualizer using window popup please accept &
+                    allow all popup
                 </p>
                 <p class="text-red-500">
                     Danger : multiple window popup will show and will likely
@@ -289,6 +289,10 @@
             </div>
         {:else}
             <div class="mt-4 text-center text-gray-400">
+                <p class="text-yellow-500">
+                    Warning : to show viasualizer using window popup please accept &
+                    allow all popup
+                </p>
                 <p class="text-yellow-500">
                     Warning : dont hover to browser icon in toolbar or browser
                     preview will freeze
