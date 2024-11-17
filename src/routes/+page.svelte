@@ -39,9 +39,7 @@
         if (url == null) return;
         initAudio();
         clear = false;
-        audioElement.src = url;
-        hasFile = true;
-        currentFile = url;
+     
         const jsmediatags = (window as any).jsmediatags;
         jsmediatags.read(url, {
             onSuccess: function (tag: any) {
@@ -66,6 +64,10 @@
                 };
             },
         });
+
+        audioElement.src = url;
+        hasFile = true;
+        currentFile = url;
     }
 
     async function handleFileSelect(event: Event) {

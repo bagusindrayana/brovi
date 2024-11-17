@@ -131,9 +131,10 @@
     async function drawWindows() {
         if (alreadyDrawWindows) return;
         // const bufferLength = analyser.frequencyBinCount
+        await delay(500);
         windows = [];
         const barWidth = 150;
-        var ammout = Math.round(window.screen.width / barWidth) - 1;
+        var ammout = Math.round(window.screen.width / barWidth) - 2;
         alreadyDrawWindows = true;
 
         var x = 0;
