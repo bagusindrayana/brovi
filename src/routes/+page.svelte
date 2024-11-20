@@ -285,7 +285,8 @@
                 <p class="mt-2 text-red-400 text-sm">{error}</p>
             {/if}
         </div>
-        {#if currentFile == null}
+        <!-- using yt link -->
+        <!-- {#if currentFile == null}
             <div transition:slide={{duration:500}} class="w-full">
                 <p class="text-center">Or</p>
                 <div class="mb-4 w-full">
@@ -309,7 +310,7 @@
                     </div>
                 </div>
             </div>
-        {/if}
+        {/if} -->
 
         <div class="relative">
             {#if hasFile}
