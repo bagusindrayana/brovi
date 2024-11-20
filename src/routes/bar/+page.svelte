@@ -33,6 +33,7 @@
         const ctx = canvas.getContext("2d")!;
 
         function draw() {
+            ctx.clearRect(0, 0, WIDTH, HEIGHT)
             // ctx.fillStyle = "rgba(255, 255, 255, 0)";
             // ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -78,22 +79,5 @@
     <p id="message"></p>
     <canvas bind:this={canvas} class="bg-transparent" width={800} height={500}
     ></canvas>
-    <div class="absolutre bggrid"></div>
+    <div class="absolute bggrid"></div>
 </div>
-
-<style>
-    .bggrid {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-            to bottom,
-            transparent 50%,
-            rgba(0, 0, 0, 0.1) 50%
-        );
-        background-size: 100% 4px;
-        pointer-events: none;
-    }
-</style>

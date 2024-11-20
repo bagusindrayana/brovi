@@ -173,6 +173,8 @@
             }
         }, 100);
     }
+
+  
 </script>
 
 <svelte:head>
@@ -319,6 +321,7 @@
                     play={isPlaying}
                     {clear}
                     on:ready={(v) => {
+                        window.focus();
                         visualReady = v.detail == true;
                     }}
                     on:popuperror={(v) => {
@@ -326,6 +329,7 @@
                             clearAll();
                         }
                     }}
+                    
                 />
                 {#if visualReady}
                     <div
