@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { fade, slide } from "svelte/transition";
     import "../app.css";
     import { onMount } from "svelte";
     import { Music2, Upload, CircleX } from "lucide-svelte";
@@ -39,7 +40,7 @@
         if (url == null) return;
         initAudio();
         clear = false;
-     
+
         const jsmediatags = (window as any).jsmediatags;
         jsmediatags.read(url, {
             onSuccess: function (tag: any) {
@@ -118,6 +119,35 @@
         }
     }
 
+    async function convertYt() {
+        const url = (document.getElementById("yt-link") as HTMLInputElement)
+            .value;
+        const options = {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        };
+
+        fetch("/api/info?url=" + url, options)
+            .then((response) => response.json())
+            .then((response) => {
+                initAudio();
+                clear = false;
+
+                songInfo = {
+                    title: response.title,
+                    artist: response.author,
+                };
+
+                audioElement.src = response.streamurl;
+                hasFile = true;
+                currentFile = response.streamurl;
+            })
+            .catch((err) => console.error(err));
+    }
+
     function togglePlayPause() {
         if (audioElement.paused) {
             audioElement.play();
@@ -127,7 +157,7 @@
     }
 
     function clearAll() {
-        if(audioElement){
+        if (audioElement) {
             audioElement.pause();
         }
         hasFile = false;
@@ -138,7 +168,7 @@
 
         setTimeout(() => {
             currentFile = null;
-            if(audioElement){
+            if (audioElement) {
                 audioElement.remove();
             }
         }, 100);
@@ -153,60 +183,63 @@
 >
     <div class="max-w-4xl mx-auto">
         {#if currentFile == null}
-            <div class="text-center mb-12">
-                <div class="flex items-center justify-center mb-4">
-                    <Music2 class="w-12 h-12 text-purple-400" />
+            <div transition:slide={{ duration: 1000 }} class="w-full mb-4">
+                <div class="text-center mb-12">
+                    <div class="flex items-center justify-center mb-4">
+                        <Music2 class="w-12 h-12 text-purple-400" />
+                    </div>
+                    <h1
+                        class="text-4xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text"
+                    >
+                        Browser Visualizer
+                    </h1>
+                    <p class="text-gray-400">
+                        Use multiple window popup to visualize audio
+                    </p>
                 </div>
-                <h1
-                    class="text-4xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text"
+                <div
+                    class="flex gap-2 text-xs justify-center items-center text-center"
                 >
-                    Browser Visualizer
-                </h1>
-                <p class="text-gray-400">
-                    Use multiple window popup to visualize audio
-                </p>
-            </div>
-            <div
-                class="flex gap-2 mb-4 text-xs justify-center items-center text-center"
-            >
-                <p>Sample</p>
-                <p>:</p>
-                <button
-                    class="rounded-full bg-gray-400 px-2 py-1"
-                    on:click={() => {
-                        selectSampleMusic(
-                            window.location.href +
-                                "sample/Symphony no. 5 in Cm, Op. 67 - I. Allegro con brio.mp3",
-                        );
-                    }}
-                >
-                    Symphony no. 5 in Cm, Op. 67 - I. Allegro con brio
-                </button>
-                <button
-                    class="rounded-full bg-gray-400 px-2 py-1"
-                    on:click={() => {
-                        selectSampleMusic(
-                            window.location.href +
-                                "sample/Paul Pitman - Moonlight Sonata Op. 27 No. 2 - III. Presto.mp3",
-                        );
-                    }}
-                >
-                    Paul Pitman - Moonlight Sonata Op. 27 No. 2 - III. Presto
-                </button>
-                <button
-                    class="rounded-full bg-gray-400 px-2 py-1"
-                    on:click={() => {
-                        selectSampleMusic(
-                            window.location.href +
-                                "sample/HXI - Lock n' Load - NCS.weba",
-                        );
-                    }}
-                >
-                    HXI - Lock n' Load - NCS
-                </button>
+                    <p>Sample</p>
+                    <p>:</p>
+                    <button
+                        class="rounded-full bg-gray-400 px-2 py-1"
+                        on:click={() => {
+                            selectSampleMusic(
+                                window.location.href +
+                                    "sample/Symphony no. 5 in Cm, Op. 67 - I. Allegro con brio.mp3",
+                            );
+                        }}
+                    >
+                        Symphony no. 5 in Cm, Op. 67 - I. Allegro con brio
+                    </button>
+                    <button
+                        class="rounded-full bg-gray-400 px-2 py-1"
+                        on:click={() => {
+                            selectSampleMusic(
+                                window.location.href +
+                                    "sample/Paul Pitman - Moonlight Sonata Op. 27 No. 2 - III. Presto.mp3",
+                            );
+                        }}
+                    >
+                        Paul Pitman - Moonlight Sonata Op. 27 No. 2 - III.
+                        Presto
+                    </button>
+                    <button
+                        class="rounded-full bg-gray-400 px-2 py-1"
+                        on:click={() => {
+                            selectSampleMusic(
+                                window.location.href +
+                                    "sample/HXI - Lock n' Load - NCS.weba",
+                            );
+                        }}
+                    >
+                        HXI - Lock n' Load - NCS
+                    </button>
+                </div>
             </div>
         {/if}
-        <div class="mb-8">
+        <div class="mb-4">
             <label
                 class="flex flex-col items-center justify-center w-full h-32 px-4 transition bg-gray-800 border-2 border-gray-700 border-dashed rounded-lg hover:border-purple-500 hover:bg-gray-800/50 relative"
             >
@@ -252,6 +285,31 @@
                 <p class="mt-2 text-red-400 text-sm">{error}</p>
             {/if}
         </div>
+        {#if currentFile == null}
+            <div transition:slide={{duration:500}} class="w-full">
+                <p class="text-center">Or</p>
+                <div class="mb-4 w-full">
+                    <div
+                        class="flex items-center border-b border-teal-500 py-2"
+                    >
+                        <input
+                            id="yt-link"
+                            class="appearance-none bg-transparent border-none w-full text-gray-200 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                            type="text"
+                            placeholder="Youtube/YT Music link..."
+                            aria-label="Youtube/YT Music link"
+                        />
+                        <button
+                            type="button"
+                            on:click={convertYt}
+                            class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
+                        >
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {/if}
 
         <div class="relative">
             {#if hasFile}
@@ -262,14 +320,15 @@
                     on:ready={(v) => {
                         visualReady = v.detail == true;
                     }}
-                    on:popuperror={(v)=>{
-                        if(v.detail == true){
+                    on:popuperror={(v) => {
+                        if (v.detail == true) {
                             clearAll();
                         }
                     }}
                 />
                 {#if visualReady}
                     <div
+                        transition:fade
                         class="absolute bottom-4 left-1/2 transform -translate-x-1/2"
                     >
                         <PlayPauseButton
@@ -287,8 +346,8 @@
                     No visualization yet. Select an audio file to get started!
                 </p>
                 <p class="text-yellow-500">
-                    Warning : to show viasualizer using window popup please accept &
-                    allow all popup
+                    Warning : to show viasualizer using window popup please
+                    accept & allow all popup
                 </p>
                 <p class="text-red-500">
                     Danger : multiple window popup will show and will likely
@@ -299,20 +358,25 @@
         {:else}
             <div class="mt-4 text-center text-gray-400">
                 <p class="text-yellow-500">
-                    Warning : to show viasualizer using window popup please accept &
-                    allow all popup
+                    Warning : to show viasualizer using window popup please
+                    accept & allow all popup
                 </p>
                 <p class="text-yellow-500">
                     Warning : dont hover to browser icon in toolbar or browser
                     preview will freeze
                 </p>
                 <p class="text-yellow-500">
-                    Warning : click close button below song/file name to close all popup window
+                    Warning : click close button below song/file name to close
+                    all popup window
                 </p>
             </div>
         {/if}
     </div>
-    <div class="fixed left-0 right-0 text-center bottom-2 text-gray-400 block mx-auto">
-       <a href="https://github.com/bagusindrayana/brovi" target="_blank">&copy; bagusindrayana</a>
+    <div
+        class="fixed left-0 right-0 text-center bottom-2 text-gray-400 block mx-auto"
+    >
+        <a href="https://github.com/bagusindrayana/brovi" target="_blank"
+            >&copy; bagusindrayana</a
+        >
     </div>
 </div>
