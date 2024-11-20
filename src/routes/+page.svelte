@@ -290,7 +290,7 @@
                 <p class="text-center">Or</p>
                 <div class="mb-4 w-full">
                     <div
-                        class="flex items-center border-b border-teal-500 py-2"
+                        class="flex items-center border-b border-purple-500 py-2"
                     >
                         <input
                             id="yt-link"
@@ -302,7 +302,7 @@
                         <button
                             type="button"
                             on:click={convertYt}
-                            class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
+                            class="flex-shrink-0 bg-purple-500 hover:bg-purple-700 border-purple-500 hover:border-purple-700 text-sm border-4 text-white py-1 px-2 rounded"
                         >
                             Search
                         </button>
