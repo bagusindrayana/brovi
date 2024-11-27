@@ -5,6 +5,7 @@
     import { Music2, Upload, CircleX } from "lucide-svelte";
     import AudioVisualizer from "$lib/components/AudioVisualizer.svelte";
     import PlayPauseButton from "$lib/components/PlayPauseButton.svelte";
+    import {PUBLIC_STREAM_API_URL} from "$env/static/public";
 
     let audioElement: HTMLAudioElement;
     let fileInput: HTMLInputElement;
@@ -122,6 +123,10 @@
     async function convertYt() {
         const url = (document.getElementById("yt-link") as HTMLInputElement)
             .value;
+        if(url == "" || url == null){
+            alert("Please enter a valid YouTube link");
+            return;
+        }
         const options = {
             method: "GET",
             headers: {
@@ -130,7 +135,9 @@
             },
         };
 
-        fetch("/api/info?url=" + url, options)
+        const streamApiUrl = PUBLIC_STREAM_API_URL ?? "/api";
+
+        fetch(streamApiUrl+"/info?url=" + url, options)
             .then((response) => response.json())
             .then((response) => {
                 initAudio();
@@ -140,12 +147,15 @@
                     title: response.title,
                     artist: response.author,
                 };
-
-                audioElement.src = response.streamurl;
+                const streamurl = streamApiUrl+"/stream?url="+url
+                audioElement.src = streamurl;
                 hasFile = true;
-                currentFile = response.streamurl;
+                currentFile = streamurl;
             })
-            .catch((err) => console.error(err));
+            .catch((err) => {
+                console.error(err);
+                alert(err);
+            });
     }
 
     function togglePlayPause() {
@@ -288,7 +298,7 @@
             {/if}
         </div>
         <!-- using yt link -->
-        <!-- {#if currentFile == null}
+        {#if currentFile == null}
             <div transition:slide={{duration:500}} class="w-full">
                 <p class="text-center">Or</p>
                 <div class="mb-4 w-full">
@@ -312,7 +322,7 @@
                     </div>
                 </div>
             </div>
-        {/if} -->
+        {/if}
 
         <div class="relative">
             {#if hasFile}
